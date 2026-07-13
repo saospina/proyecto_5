@@ -1,0 +1,38 @@
+services:
+  api:
+    build: .
+    container_name: users-api
+    ports:
+      - "3000:3000"
+    environment:
+      # By default it points to the "db" service below. To use the Render
+      # PostgreSQL instead, export RENDER_DATABASE_URL (or set it in .env)
+      # before running compose. Note: the app's DATABASE_URL in .env is not
+      # used here because it points to localhost, which inside the container
+      # would refer to the container itself.
+      DATABASE_URL: ${RENDER_DATABASE_URL:-postgres://postgres:postgres@db:5432/usersdb}
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: users-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: usersdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d usersdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
