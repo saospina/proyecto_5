@@ -11,6 +11,9 @@ const options = {
         'Proyecto 5 — Despliegue en Azure Container Apps con CI/CD.',
     },
     servers: [
+      // Relative URL: Swagger UI targets the same host that serves the docs
+      // (Azure in production, localhost in development).
+      { url: '/', description: 'Este servidor' },
       { url: 'http://localhost:3000', description: 'Local' },
     ],
   },
