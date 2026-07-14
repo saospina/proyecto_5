@@ -2,6 +2,8 @@
 
 API REST de gestión de usuarios (CRUD) contenerizada con Docker, con base de datos PostgreSQL, documentación Swagger, tests unitarios y de integración, y pipeline CI/CD en Azure Pipelines que despliega automáticamente en **Azure Container Apps** desde **Azure Container Registry (ACR)**.
 
+**Aplicación desplegada**: https://my-backend.nicewave-501ae3ff.eastus.azurecontainerapps.io ([Swagger](https://my-backend.nicewave-501ae3ff.eastus.azurecontainerapps.io/api-docs) · [Health](https://my-backend.nicewave-501ae3ff.eastus.azurecontainerapps.io/health))
+
 ## Modelo de datos
 
 Tabla `users` (se crea automáticamente al arrancar la aplicación):
@@ -102,7 +104,7 @@ npm test                    # unitarios + integración
 ### 1. Crear el ACR y subir la imagen
 
 ```bash
-az group create --name rg-proyecto5 --location westeurope
+az group create --name rg-proyecto5 --location eastus
 az acr create --resource-group rg-proyecto5 --name <tu_acr> --sku Basic
 
 az acr login --name <tu_acr>
@@ -117,7 +119,7 @@ docker push <tu_acr>.azurecr.io/my-backend:v1
 az containerapp env create \
   --name proyecto5-env \
   --resource-group rg-proyecto5 \
-  --location westeurope
+  --location eastus
 
 az containerapp create \
   --name my-backend \
